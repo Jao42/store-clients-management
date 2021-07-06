@@ -3,12 +3,30 @@ from PyQt5.QtWidgets import QApplication, QWidget, QLineEdit, QTableView, QHeade
 from PyQt5.QtCore import Qt, QSortFilterProxyModel
 from PyQt5.QtGui import QStandardItemModel, QStandardItem
 
+from operacoes_db import procurar_produtos, mostrar_produtos
+
+produtos = ['',]
+colunas_headers = ('Nome', 'Preço', 'Qtd', 'Código')
+model = QStandardItemModel(len(produtos), len(colunas_headers))
+
+def mostrar_pesquisa(res):
+  model.clear()
+  model.setHorizontalHeaderLabels(colunas_headers)
+  for i in range(len(res)):
+    model.setItem(i, 0, QStandardItem(str(res[i][0])))
+    model.setItem(i, 1, QStandardItem(str(res[i][1])))
+    model.setItem(i, 2, QStandardItem(str(res[i][2])))
+    model.setItem(i, 3, QStandardItem(str(res[i][3])))
+
+def pesquisa(termo):
+  res = procurar_produtos(termo)
+  mostrar_pesquisa(res)
+
 class Produto():
   def __init__(self, nome, preco, codigo):
     self.nome = nome
     self.preco = preco
     self.codigo = codigo
-
 
 class AppDemo(QWidget):
   def __init__(self):
@@ -16,26 +34,16 @@ class AppDemo(QWidget):
     self.setGeometry(300, 100, 700, 600)
     mainLayout = QVBoxLayout()
 
-    produtos = [['maçã', '20', '3', '33ddfa1']]
-    colunas_headers = ('Nome', 'Preço', 'Qtd', 'Código')
 
-    model = QStandardItemModel(len(produtos), len(colunas_headers))
     #^^ implementa modelo tabela ...(linhas, colunas)
     model.setHorizontalHeaderLabels(colunas_headers)
+    produtos = mostrar_produtos()
+    mostrar_pesquisa(produtos)
 
-    for produto_index in range(len(produtos)):
-      for campo_index in range(len(produtos[produto_index])):
-        item = QStandardItem(produtos[produto_index][campo_index])
-        model.setItem(produto_index, campo_index, item)
-
-    filter_proxy_model = QSortFilterProxyModel()
-    filter_proxy_model.setSourceModel(model)
-    filter_proxy_model.setFilterCaseSensitivity(Qt.CaseInsensitive)
-    filter_proxy_model.setFilterKeyColumn(0)
 
     nome_entrada = QLineEdit()
     nome_entrada.setStyleSheet('font-size: 25px; height: 30px;')
-    nome_entrada.textChanged.connect(filter_proxy_model.setFilterRegExp)
+    nome_entrada.textChanged.connect(pesquisa)
 
     mainLayout.addWidget(nome_entrada)
 
@@ -44,7 +52,7 @@ class AppDemo(QWidget):
     #table.verticalHeader().setSectionResizeMode(QHeaderView.Stretch)
     table.verticalHeader().setVisible(False)
     table.horizontalHeader().setSectionResizeMode(QHeaderView.Stretch)
-    table.setModel(filter_proxy_model)
+    table.setModel(model)
     mainLayout.addWidget(table)
 
     self.setLayout(mainLayout)
@@ -53,5 +61,3 @@ app = QApplication(sys.argv)
 demo = AppDemo()
 demo.show()
 sys.exit(app.exec_())
-
-
