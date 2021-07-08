@@ -1,5 +1,5 @@
 import sys
-from PyQt5.QtWidgets import QApplication, QWidget, QLineEdit, QTableView, QHeaderView, QVBoxLayout
+from PyQt5.QtWidgets import QApplication, QWidget, QLineEdit, QTableView, QHeaderView, QVBoxLayout, QPushButton, QStackedLayout
 from PyQt5.QtCore import Qt, QSortFilterProxyModel
 from PyQt5.QtGui import QStandardItemModel, QStandardItem
 
@@ -34,12 +34,10 @@ class AppDemo(QWidget):
     self.setGeometry(300, 100, 700, 600)
     mainLayout = QVBoxLayout()
 
-
     #^^ implementa modelo tabela ...(linhas, colunas)
     model.setHorizontalHeaderLabels(colunas_headers)
     produtos = mostrar_produtos()
     mostrar_pesquisa(produtos)
-
 
     nome_entrada = QLineEdit()
     nome_entrada.setStyleSheet('font-size: 25px; height: 30px;')
@@ -56,6 +54,7 @@ class AppDemo(QWidget):
     mainLayout.addWidget(table)
 
     self.setLayout(mainLayout)
+    
 
 app = QApplication(sys.argv)
 demo = AppDemo()
