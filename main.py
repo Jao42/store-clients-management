@@ -13,10 +13,8 @@ def mostrar_pesquisa(res):
   model.clear()
   model.setHorizontalHeaderLabels(colunas_headers)
   for i in range(len(res)):
-    model.setItem(i, 0, QStandardItem(str(res[i][0])))
-    model.setItem(i, 1, QStandardItem(str(res[i][1])))
-    model.setItem(i, 2, QStandardItem(str(res[i][2])))
-    model.setItem(i, 3, QStandardItem(str(res[i][3])))
+    for k in range(len(colunas_headers)):
+      model.setItem(i, k, QStandardItem(str(res[i][k])))
 
 def pesquisa(termo):
   res = procurar_produtos(termo)
@@ -74,7 +72,7 @@ class GerenciarProdutosWindow(QWidget):
                 'codigo': QLineEdit()
               }
 
-    button = QPushButton("Enviar")
+    button = QPushButton("Adicionar")
 
     for entrada in entradas.values():
       entrada.setMaximumWidth(450)
