@@ -7,17 +7,23 @@ def criar_tabela():
   cursor.execute("""CREATE TABLE produtos (
                 nome text,
                 preco real,
-                quantidade integer,
-                codigo text
+                quantidade integer
                 )""")
   conexao.commit()
   return 0
 
-def inserir_produto(nome, preco, quantidade, codigo):
+def inserir_produto(nome, preco, quantidade):
   conexao = sqlite3.connect('test-db.db')
   cursor = conexao.cursor()
   cursor.execute("INSERT INTO produtos VALUES" +
-               f"('{nome}', '{preco}', '{quantidade}', '{codigo}')")
+               f"('{nome}', '{preco}', '{quantidade}')")
+  conexao.commit()
+  return 0
+
+def deletar_produto(rowid):
+  conexao = sqlite3.connect('test-db.db')
+  cursor = conexao.cursor()
+  cursor.execute("DELETE FROM produtos WHERE rowid = (?)", (rowid, ))
   conexao.commit()
   return 0
 
@@ -32,10 +38,9 @@ def dropar_tabela():
 def procurar_produtos(termo):
   conexao = sqlite3.connect('test-db.db')
   cursor = conexao.cursor()
-  cursor.execute(f"""SELECT * FROM produtos
+  cursor.execute(f"""SELECT *, rowid FROM produtos
                 WHERE (
                 preco = ? OR
-                codigo = ? OR
                 quantidade = ? OR
                 nome LIKE ?
                 )""", (termo, termo, termo, '%' + termo + '%'))
@@ -46,9 +51,11 @@ def procurar_produtos(termo):
 def mostrar_produtos():
   conexao = sqlite3.connect('test-db.db')
   cursor = conexao.cursor()
-  cursor.execute('SELECT * FROM produtos')
+  cursor.execute('SELECT *, rowid FROM produtos')
   produtos = cursor.fetchall()
   conexao.commit()
   return produtos
 
 
+if __name__ == '__main__':
+  print(mostrar_produtos())

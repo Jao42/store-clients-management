@@ -2,12 +2,15 @@ import sys
 from PyQt5.QtWidgets import QGridLayout, QApplication, QWidget, QLineEdit, QTableView, QHeaderView, QVBoxLayout, QHBoxLayout, QPushButton, QStackedLayout, QMainWindow, QLabel, QFormLayout, QSpinBox, QDoubleSpinBox
 from PyQt5.QtCore import Qt, QSortFilterProxyModel, QRect, QSize
 from PyQt5.QtGui import QStandardItemModel, QStandardItem
-
 from operacoes_db import procurar_produtos, mostrar_produtos, inserir_produto
 
 produtos = ['',]
-colunas_headers = ('Nome', 'Preço', 'Qtd', 'Código')
+colunas_headers = ('Nome', 'Preço', 'Qtd', 'ID')
 model = QStandardItemModel(len(produtos), len(colunas_headers))
+
+def mostrarItem(item):
+  model.index(item.row(), item.column())
+  print(str(colunas_headers[item.column()]) + ': ' + str(item.data()))
 
 def mostrar_pesquisa(res):
   model.clear()
@@ -21,10 +24,9 @@ def pesquisa(termo):
   mostrar_pesquisa(res)
 
 class Produto():
-  def __init__(self, nome, preco, codigo):
+  def __init__(self, nome, preco):
     self.nome = nome
     self.preco = preco
-    self.codigo = codigo
 
 class BuscarProdutosWindow(QWidget):
   def __init__(self):
@@ -44,6 +46,7 @@ class BuscarProdutosWindow(QWidget):
     mainLayout.addWidget(nome_entrada)
 
     table = QTableView()
+    table.doubleClicked.connect(mostrarItem)
     table.setStyleSheet('font-size: 15px;')
     #table.verticalHeader().setSectionResizeMode(QHeaderView.Stretch)
     table.verticalHeader().setVisible(False)
@@ -63,13 +66,11 @@ class GerenciarProdutosWindow(QWidget):
                 'nome': QLabel('Nome'),
                 'preco': QLabel('Preço'),
                 'quantidade': QLabel('Quantidade'),
-                'codigo': QLabel('Código')
               }
     entradas = {
                 'nome': QLineEdit(),
                 'preco': QDoubleSpinBox(),
                 'quantidade': QSpinBox(),
-                'codigo': QLineEdit()
               }
 
     button = QPushButton("Adicionar")
@@ -83,6 +84,7 @@ class GerenciarProdutosWindow(QWidget):
     for nome in labels.keys():
       layout.addWidget(labels[nome])
       layout.addWidget(entradas[nome])
+
     entradas['preco'].setSuffix('R$')
     entradas['preco'].setRange(0, 1000000)
 
@@ -90,23 +92,20 @@ class GerenciarProdutosWindow(QWidget):
 
     button.clicked.connect(lambda:inserir_produto(
       entradas['nome'].text(),
-      entradas['quantidade'].text(),
-      entradas['preco'].text(),
-      entradas['codigo'].text()
+      entradas['preco'].value(),
+      entradas['quantidade'].value(),
     ))
     for entrada in entradas.values():
       try:
         entrada.returnPressed.connect(lambda:inserir_produto(
-        entradas['nome'].text(),
-        entradas['quantidade'].text(),
-        entradas['preco'].text(),
-        entradas['codigo'].text()
-      ))
+          entradas['nome'].text(),
+          entradas['preco'].value(),
+          entradas['quantidade'].value(),
+        ))
       except AttributeError:
         continue
 
     self.setLayout(layout)
-
 
 class InicialWindow(QWidget):
   def __init__(self):
