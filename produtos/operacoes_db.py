@@ -42,6 +42,7 @@ def procurar_produtos(termo):
                 WHERE (
                 preco = ? OR
                 quantidade = ? OR
+                rowid = ? OR
                 nome LIKE ?
                 )""", (termo, termo, termo, '%' + termo + '%'))
   items = cursor.fetchall()
