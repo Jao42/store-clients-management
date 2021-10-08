@@ -25,7 +25,11 @@ class FormClienteTela(QWidget):
 
     nomeEdit = QLineEdit(self.nome_var)
     dividaEdit = QDoubleSpinBox()
-    notasEdit = QTextEdit(self.notas_var)
+
+    #formatacao com \n tava dando ruim
+    notasEdit = QTextEdit()
+    notasEdit.insertPlainText(self.notas_var)
+
     enviar = QPushButton(self.contexto.title())
 
     dividaEdit.setRange(0, 1000000)
