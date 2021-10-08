@@ -60,6 +60,11 @@ class ClientesListaTela(QWidget):
     self.add_cliente = FormClienteTela()
     self.add_cliente.show()
 
+  def keyPressEvent(self, e):
+    if e.key() == Qt.Key_F5:
+      model.setStringList(pegar_nomes_clientes())
+      self.lista.setModel(model)
+
 
 app = QApplication(sys.argv)
 demo = ClientesListaTela()
