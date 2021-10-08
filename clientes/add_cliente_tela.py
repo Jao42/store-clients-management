@@ -55,12 +55,6 @@ class FormClienteTela(QWidget):
           notasEdit.toPlainText())
       )
     elif self.contexto == 'modificar':
-      {
-        'nome': nomeEdit.text(),
-        'divida': dividaEdit.value(),
-        'notas': notasEdit.toPlainText(),
-        'nome_antigo': self.nome_var
-        }
 
       enviar.clicked.connect(
         lambda:modificar_cliente(
