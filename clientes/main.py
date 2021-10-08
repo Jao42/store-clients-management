@@ -1,21 +1,47 @@
 import sys
-from PyQt5.QtWidgets import QGridLayout, QApplication, QWidget, QLineEdit, QTableView, QListView, QHeaderView, QVBoxLayout, QHBoxLayout, QPushButton, QStackedLayout, QMainWindow, QLabel, QFormLayout, QSpinBox, QDoubleSpinBox, QComboBox
-from PyQt5.QtCore import Qt, QSortFilterProxyModel, QRect, QSize, QStringListModel
+from PyQt5.QtWidgets import (QGridLayout,
+                             QApplication,
+                             QWidget,
+                             QLineEdit,
+                             QTableView,
+                             QListView,
+                             QHeaderView,
+                             QVBoxLayout,
+                             QHBoxLayout,
+                             QPushButton,
+                             QStackedLayout,
+                             QMainWindow,
+                             QLabel,
+                             QFormLayout,
+                             QSpinBox,
+                             QDoubleSpinBox,
+                             QComboBox
+                             )
+from PyQt5.QtCore import (Qt, QSortFilterProxyModel,
+                          QRect, QSize,
+                          QStringListModel, QEvent
+                          )
 from PyQt5.QtGui import QStandardItemModel, QStandardItem
 from operacoes_db import *
 from cliente_tela import ClienteInfoTela
 from add_cliente_tela import FormClienteTela
+
 
 produtos = ['',]
 model = QStringListModel()
 
 model.setStringList(pegar_nomes_clientes())
 layoutTela = [
-  "display", "display", "select"
+  "display", "display", "select",
   "lista", "lista", "lista",
   "lista", "lista", "lista",
   "lista", "lista", "lista"
  ]
+
+def pesquisa_nomes(termo):
+  res = procurar_clientes(termo)
+  nomes = [cliente[0] for cliente in res]
+  model.setStringList(nomes)
 
 def mostrar_item(item):
   print(item.data())
@@ -28,15 +54,16 @@ class ClientesListaTela(QWidget):
     forma_busca = QComboBox()
     forma_busca.addItem('Nome')
     forma_busca.addItem('Dívida')
-    lista = QListView()
-    lista.setEditTriggers(lista.NoEditTriggers)
-    lista.doubleClicked.connect(self.mostrarClienteInfo)
+    self.lista = QListView()
+    self.lista.setEditTriggers(self.lista.NoEditTriggers)
+    self.lista.doubleClicked.connect(self.mostrarClienteInfo)
     procurar_pessoa = QLineEdit()
-    lista.setStyleSheet(
+    procurar_pessoa.textChanged.connect(pesquisa_nomes)
+    self.lista.setStyleSheet(
       'font-size: 20px;'+
       'margin: 5px 10px 15px 5px;'
     )
-    lista.setModel(model)
+    self.lista.setModel(model)
 
     botao_adicionar = QPushButton('Adicionar Cliente')
     botao_adicionar.setStyleSheet('padding: 5px;')
@@ -44,7 +71,7 @@ class ClientesListaTela(QWidget):
 
     mainLayout.addWidget(procurar_pessoa, 0, 0, 1, 1)
     mainLayout.addWidget(forma_busca, 0, 2, 1, 2)
-    mainLayout.addWidget(lista, 1, 0, 3, 4)
+    mainLayout.addWidget(self.lista, 1, 0, 3, 4)
     mainLayout.addWidget(botao_adicionar, 4, 3, 1, 1)
 
     self.setLayout(mainLayout)
