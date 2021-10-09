@@ -53,7 +53,7 @@ class FormClienteTela(QWidget):
     campos = [nomeEdit, dividaEdit, notasEdit]
     if self.contexto == 'adicionar':
       enviar.clicked.connect(
-        lambda:inserir_cliente(
+        lambda:self.addClienteGUI(
           nomeEdit.text(),
           dividaEdit.value(),
           notasEdit.toPlainText())
@@ -76,6 +76,10 @@ class FormClienteTela(QWidget):
     self.setGeometry(300, 100, 700, 600)
     self.setWindowTitle('Adicionar Cliente')
     self.setLayout(grid)
+    
+  def addClienteGUI(self, nome, divida, notas):
+    inserir_cliente(nome, divida, notas)
+    self.close()
 
 
 def main():
