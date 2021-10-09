@@ -41,7 +41,7 @@ def procurar_clientes(termo, exato=False):
   items = cursor.fetchall()
   conexao.commit()
   return items
- 
+
 
 def mostrar_clientes():
   conexao = sqlite3.connect('clientes.db')
@@ -72,11 +72,7 @@ def modificar_cliente(dados):
 
 
 if __name__ == '__main__':
-  modificar_cliente(
-    {'nome': 'clodoaldo',
-    'divida': 5300,
-    'notas': 'bandido FINO',
-    'nome_antigo': 'clodoaldo'}
-  )
-  print(procurar_clientes('clodoaldo'))
+  clientes = mostrar_clientes()
+  for i in clientes:
+    print(clientes)
 
