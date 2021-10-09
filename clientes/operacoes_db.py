@@ -26,16 +26,22 @@ def dropar_tabela():
   conexao.commit()
   return 0
 
-def procurar_clientes(termo):
+def procurar_clientes(termo, exato=False):
+  if exato:
+    operador_busca = '='
+  else:
+    operador_busca = 'LIKE'
+    termo = '%' + termo + '%'
   conexao = sqlite3.connect('clientes.db')
   cursor = conexao.cursor()
   cursor.execute(f"""SELECT *, rowid FROM clientes
                 WHERE (
-                nome LIKE ?
-                )""", ('%' + termo + '%', ))
+                nome {operador_busca} ?
+                )""", (termo))
   items = cursor.fetchall()
   conexao.commit()
   return items
+ 
 
 def mostrar_clientes():
   conexao = sqlite3.connect('clientes.db')

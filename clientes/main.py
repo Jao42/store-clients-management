@@ -78,7 +78,7 @@ class ClientesListaTela(QWidget):
 
   def mostrarClienteInfo(self, row):
     cliente_nome = row.data()
-    nome, divida, notas, id = procurar_clientes(cliente_nome)[0]
+    nome, divida, notas, id = procurar_clientes(cliente_nome, True)[0]
 
     self.cliente_info = ClienteInfoTela(nome, divida, notas)
     self.cliente_info.show()
