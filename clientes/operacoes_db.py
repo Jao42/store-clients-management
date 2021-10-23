@@ -72,7 +72,12 @@ def modificar_cliente(dados):
 
 
 if __name__ == '__main__':
-  clientes = mostrar_clientes()
-  for i in clientes:
-    print(clientes)
+  try:
+    open('clientes.db', 'x')
+    criar_tabela()
+    print('BANCO DE DADOS CRIADO!:D')
+  except FileExistsError:
+    clientes = mostrar_clientes()
+    for i in clientes:
+      print(clientes)
 
