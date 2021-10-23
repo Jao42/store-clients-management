@@ -37,7 +37,7 @@ def procurar_clientes(termo, exato=False):
   cursor.execute(f"""SELECT *, rowid FROM clientes
                 WHERE (
                 nome {operador_busca} ?
-                )""", (termo))
+                )""", (termo, ))
   items = cursor.fetchall()
   conexao.commit()
   return items
