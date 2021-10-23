@@ -61,7 +61,7 @@ class FormClienteTela(QWidget):
     elif self.contexto == 'modificar':
 
       enviar.clicked.connect(
-        lambda:modificar_cliente(
+        lambda:self.modificarClienteGUI(
           {
           'nome': nomeEdit.text(),
           'divida': dividaEdit.value(),
@@ -81,6 +81,9 @@ class FormClienteTela(QWidget):
     inserir_cliente(nome, divida, notas)
     self.close()
 
+  def modificarClienteGUI(self, dados):
+    modificar_cliente(dados)
+    self.close()
 
 def main():
     app = QApplication(sys.argv)
