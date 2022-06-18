@@ -15,7 +15,8 @@ from PyQt5.QtWidgets import (QGridLayout,
                              QFormLayout,
                              QSpinBox,
                              QDoubleSpinBox,
-                             QComboBox
+                             QComboBox,
+                             QScrollArea
                              )
 from PyQt5.QtCore import (Qt, QSortFilterProxyModel,
                           QRect, QSize,
@@ -64,6 +65,25 @@ class ClientesListaTela(QWidget):
       'margin: 5px 10px 15px 5px;'
     )
     self.lista.setModel(model)
+
+    self.lista.setStyleSheet("""
+            QScrollBar:vertical {
+            border: none;
+            background:white;
+            width: 8px;
+            margin: 0px 0px 0px 0px;
+        }
+            QListView {
+                font-family: Arial;
+                font-size: 20px;
+
+            }
+            QScrollBar::handle:vertical {
+            background: qlineargradient(x1:0, y1:0, x2:1, y2:0,
+            stop: 0 rgb(32, 47, 130), stop: 0.5 rgb(32, 47, 130), stop:1 rgb(32, 47, 130));
+            min-height: 0px;
+            }
+        """)
 
     botao_adicionar = QPushButton('Adicionar Cliente')
     botao_adicionar.setStyleSheet('padding: 5px;')
