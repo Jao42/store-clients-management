@@ -39,14 +39,14 @@ class ClienteInfoTela(QWidget):
     labelNotas.setAlignment(Qt.AlignBottom | Qt.AlignLeft)
     notas.setAlignment(Qt.AlignTop | Qt.AlignLeft)
     notas.setStyleSheet(
-      'border: 1px solid grey;'+
       'font-family: Arial;' +
-      'font-size: 15px'
+      'font-size: 15px;'
     )
     editarButton = QPushButton('Editar')
     editarButton.clicked.connect(self.edit_cliente_botao)
     scrollNotas = QScrollArea()
     scrollNotas.setWidget(notas)
+    scrollNotas.setWidgetResizable(True)
 
     mainLayout.addWidget(nome, 0, 0, 1, 7)
     mainLayout.addWidget(labelDivida, 2, 0, 1, 2)
@@ -54,6 +54,10 @@ class ClienteInfoTela(QWidget):
     mainLayout.addWidget(labelNotas, 3, 0, 1, 2)
     mainLayout.addWidget(scrollNotas, 4, 0, 3, 7)
     mainLayout.addWidget(editarButton, 7, 6)
+
+    for i in range(0, 8):
+        mainLayout.setRowStretch(i , 1)
+
 
     self.setLayout(mainLayout)
 
