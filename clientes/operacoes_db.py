@@ -79,5 +79,5 @@ if __name__ == '__main__':
   except FileExistsError:
     clientes = mostrar_clientes()
     for i in clientes:
-      print(clientes)
+      print(i)
 
