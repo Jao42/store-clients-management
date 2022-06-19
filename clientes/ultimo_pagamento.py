@@ -2,6 +2,7 @@ import sqlite3
 import re
 from datetime import date, timedelta
 import subprocess
+from criar_pdf import PDF
 
 def dividaPeloNome(nome):
 
@@ -12,7 +13,7 @@ def dividaPeloNome(nome):
   conexao.commit()
   return divida[0]
 
-def gerarRelatorio():
+def gerarTXT():
   conexao = sqlite3.connect("clientes.db")
   cursor = conexao.cursor()
   cursor.execute("SELECT nome, notas FROM clientes")
@@ -48,7 +49,7 @@ def gerarRelatorio():
     if i[1] >= 3 and i[1] <= 24:
       intervalo.append(i)
 
-  with open('relatorio.txt', 'a') as relatorio:
+  with open('relatorio.txt', 'w') as relatorio:
     for cliente in intervalo:
       nome = cliente[0]
       divida = dividaPeloNome(cliente[0])
@@ -65,6 +66,17 @@ def gerarRelatorio():
     divida_total = sum([dividaPeloNome(cliente[0]) for cliente in intervalo])
     divida_total = str(divida_total).replace('.', ',')
     relatorio.write(f"\nNo total temos uma dívida de R${divida_total} sem nenhum pagamento efetuado entre 3 meses e 2 anos passados\n")
-    subprocess.run(['xdg-open', 'relatorio.txt'], check=True)
-    return 0;
+    return 0
 
+def gerarRelatorio():
+  gerarTXT()
+
+  pdf = PDF()
+  pdf.add_page()
+  pdf.titles()
+  pdf.texts('relatorio.txt')
+  pdf.output('relatorio.pdf', 'F')
+  subprocess.run(['xdg-open', 'relatorio.pdf'], check=True)
+
+if __name__ == '__main__':
+  gerarRelatorio()
