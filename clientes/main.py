@@ -26,6 +26,7 @@ from PyQt5.QtGui import QStandardItemModel, QStandardItem
 from operacoes_db import *
 from cliente_tela import ClienteInfoTela
 from add_cliente_tela import FormClienteTela
+from ultimo_pagamento import gerarRelatorio
 
 
 produtos = ['',]
@@ -86,13 +87,20 @@ class ClientesListaTela(QWidget):
         """)
 
     botao_adicionar = QPushButton('Adicionar Cliente')
+    botao_relatorio = QPushButton('Gerar Relatório')
     botao_adicionar.setStyleSheet('padding: 5px;')
+    botao_relatorio.setStyleSheet('padding: 5px;')
     botao_adicionar.clicked.connect(self.adicionarClienteBotao)
+    botao_relatorio.clicked.connect(gerarRelatorio)
 
-    mainLayout.addWidget(procurar_pessoa, 0, 0, 1, 1)
-    mainLayout.addWidget(forma_busca, 0, 2, 1, 2)
+    mainLayout.addWidget(procurar_pessoa, 0, 0, 1, 3)
+    mainLayout.addWidget(forma_busca, 0, 3, 1, 1)
     mainLayout.addWidget(self.lista, 1, 0, 3, 4)
+    mainLayout.addWidget(botao_relatorio, 4, 0, 1, 1)
     mainLayout.addWidget(botao_adicionar, 4, 3, 1, 1)
+
+    for i in range(0, mainLayout.columnCount()):
+        mainLayout.setColumnStretch(i , 1)
 
     self.setLayout(mainLayout)
 
